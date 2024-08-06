@@ -1,7 +1,7 @@
-import { router } from '@kit.ArkUI';
-import { BusinessError } from '@kit.BasicServicesKit';
 import MultipleDevicesUtils from '../common/utils/MultipleDevicesUtils';
 import StyleConstants from '../common/utils/StyleConstants';
+import CommonUtils from '../common/utils/CommonUtils';
+import CommonConstants from '../common/constants/CommonConstants';
 
 // 导入页面路由模块
 @Entry
@@ -92,53 +92,93 @@ struct LoginBottom {
   @State password: string = '';
 
   build() {
-    Scroll() {
-      Column({ space: 10 }) {
-        // 设置子元素垂直方向间距为5
-        Text('space').width('90%')
-        Column({ space: 5 }) {
-          Column().width('100%').height(30).backgroundColor('red')
-          Column().width('100%').height(30).backgroundColor('black')
-        }.width('90%').height(100).border({ width: 1 })
+    Column() {
+      Column() {
+        TextInput({ placeholder: $r('app.string.account') })
+          .maxLength(StyleConstants.INPUT_ACCOUNT_LENGTH)
+          .type(InputType.Number)
+          .inputStyle()
+          .onChange((value: string) => {
+            this.account = value;
+          })
 
-        // 设置子元素水平方向对齐方式
-        Text('alignItems(Start)').width('90%')
-        Column() {
-          Column().width('50%').height(30).backgroundColor(0xAFEEEE)
-          Column().width('50%').height(30).backgroundColor(0x00FFFF)
-        }.alignItems(HorizontalAlign.Start).width('90%').border({ width: 1 })
+        Line()
+          .width(StyleConstants.FULL_PARENT)
+          .height($r('app.float.line_height'))
+          .margin({
+            left: $r('app.float.line_margin_left'),
+            right: $r('app.float.line_margin_right')
+          })
+          .backgroundColor($r('app.color.line_color'))
 
-        Text('alignItems(End)').width('90%')
-        Column() {
-          Column().width('50%').height(30).backgroundColor(0xAFEEEE)
-          Column().width('50%').height(30).backgroundColor(0x00FFFF)
-        }.alignItems(HorizontalAlign.End).width('90%').border({ width: 1 })
+        TextInput({ placeholder: $r('app.string.password') })
+          .maxLength(StyleConstants.INPUT_PASSWORD_LENGTH)
+          .type(InputType.Password)
+          .inputStyle()
+          .onChange((value: string) => {
+            this.password = value;
+          })
+      }.backgroundColor(Color.White)
+      .borderRadius($r('app.float.login_input_radius'))
 
-        Text('alignItems(Center)').width('90%')
-        Column() {
-          Column().width('50%').height(30).backgroundColor(0xAFEEEE)
-          Column().width('50%').height(30).backgroundColor(0x00FFFF)
-        }.alignItems(HorizontalAlign.Center).width('90%').border({ width: 1 })
+      Row() {
+        Text($r('app.string.message_login'))
+          .blueTextStyle()
+          .onClick(() => {
+            CommonUtils.showToastContent($r('app.string.incomplete_toast'));
+          })
+        Text($r('app.string.forgot_password'))
+          .blueTextStyle()
+          .onClick(() => {
+            CommonUtils.showToastContent($r('app.string.incomplete_toast'));
+          })
+      }
+      .justifyContent(FlexAlign.SpaceBetween)
+      .width(StyleConstants.FULL_PARENT)
+      .margin({ top: $r('app.float.forgot_margin_top') })
+      .padding({
+        left: $r('app.float.forgot_padding_left'),
+        right: $r('app.float.forgot_padding_right')
+      })
 
-        // 设置子元素垂直方向的对齐方式
-        Text('justifyContent(Center)').width('90%')
-        // Column() {
-        //   Column().width('90%').height(30).backgroundColor(0xAFEEEE)
-        //   Column().width('90%').height(30).backgroundColor(0x00FFFF)
-        // }.height(100).border({ width: 1 }).justifyContent(FlexAlign.Center)
+      Button($r('app.string.login'))
+        .id(CommonConstants.LOGIN_BUTTON_ID)
+        .width(StyleConstants.FULL_PARENT)
+        .height($r('app.float.login_button_height'))
+        .fontSize($r('app.float.normal_text_size'))
+        .fontWeight(FontWeight.Medium)
+        .backgroundColor($r('app.color.login_button_color'))
+        .margin({
+          top: $r('app.float.login_button_top'),
+          bottom: $r('app.float.login_button_bottom')
+        })
+        .onClick(() => {
+          CommonUtils.loginArkTS(this.account, this.password);
+        })
 
-        Text('justifyContent(End)').width('90%')
-        // Column() {
-        //   Column().width('90%').height(30).backgroundColor(0xAFEEEE)
-        //   Column().width('90%').height(30).backgroundColor(0x00FFFF)
-        // }.height(100).border({ width: 1 }).justifyContent(FlexAlign.End)
-      }.width('100%').padding({ top: 5 })
-      .enabled(false)
-      .backgroundImageSize(ImageSize.Auto)
-
-    }.scrollBar(BarState.Auto)
-
-
+    }.padding({
+      left: $r('app.float.login_button_left'),
+      right: $r('app.float.login_button_right'),
+    })
+    .backgroundColor($r('app.color.background'))
+    .height(StyleConstants.LOGIN_BOTTOM_HEIGHT)
 
   }
+}
+
+@Extend(TextInput)
+function inputStyle() {
+  .placeholderColor($r('app.color.placeholder_color'))
+  .height($r('app.float.login_input_height'))
+  .fontSize($r('app.float.normal_text_size'))
+  .backgroundColor(Color.White)
+  .margin({ top: $r('app.float.input_margin_top') })
+  .padding({ left: StyleConstants.INPUT_PADDING_LEFT })
+}
+
+@Extend(Text)
+function blueTextStyle() {
+  .fontColor($r('app.color.blue_text_color'))
+  .fontSize($r('app.float.small_text_size'))
+  .fontWeight(FontWeight.Medium)
 }
