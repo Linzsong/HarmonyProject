@@ -1,2 +1,4 @@
 # HarmonyProject
-鸿蒙使用案例，不同的分支有不同的案例功能
+鸿蒙学习使用案例：
+案例1： Login 界面 （login-demo 分支）
+案例2： TODO Lost （todo-list 分支）
